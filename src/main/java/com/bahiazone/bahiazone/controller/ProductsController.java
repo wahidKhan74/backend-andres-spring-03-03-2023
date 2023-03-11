@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,7 @@ public class ProductsController {
 	
 	// Get all products
 	@GetMapping("")
-	public List<Products> getAll(@RequestParam("title") String title) {
+	public List<Products> getAll(@RequestParam(value="title",required=false) String title) {
 		
 		if (title != null && title != "") {
 			return productsRepository.findByProductTitleContaining(title);
@@ -38,7 +39,7 @@ public class ProductsController {
 	
 	// Get one product by id
 	@GetMapping("/{productId}")
-	public Optional<Products> getOne(@RequestParam("id") int productId) {
+	public Optional<Products> getOne(@PathVariable("productId") int productId) {
 		return productsRepository.findById(productId);
 	}
 	
@@ -60,7 +61,7 @@ public class ProductsController {
 	}
 	
 	@DeleteMapping("/{productId}")
-	public ResponseDto deleteOne(@RequestParam("id") int productId) {
+	public ResponseDto deleteOne(@PathVariable("productId") int productId) {
 		boolean exists = productsRepository.existsById(productId);
 		
 		if (exists) {
